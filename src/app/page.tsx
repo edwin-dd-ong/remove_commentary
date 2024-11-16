@@ -1,53 +1,71 @@
+"use client";
 import Link from "next/link";
-
-import { LatestPost } from "~/app/_components/post";
 import { api, HydrateClient } from "~/trpc/server";
+import { useState } from "react";
+import Mp4ToMp3 from "./_components/mp4_to_mp3";
 
-export default async function Home() {
-  const hello = await api.post.hello({ text: "from tRPC" });
 
-  void api.post.getLatest.prefetch();
+export default function Home() {
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  
+    const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0] as File;
+        if (file && file.type === "video/mp4") {
+            setSelectedFile(file);
+            console.log('Selected file:', file.name);
+        } else {
+            window.alert("Please select an MP4 file");
+        }
+    };
+
+    const handleDownload = async () => {
+        if (selectedFile) {
+            // Create a URL for the file
+            const input_url = URL.createObjectURL(selectedFile);
+            console.log(input_url)
+            const output_url = await Mp4ToMp3(input_url);
+            // Create a temporary anchor element
+            const a = document.createElement('a');
+            a.href = output_url;
+            a.download = selectedFile.name.replace('.mp4', '.mp3');
+            document.body.appendChild(a);
+            a.click();
+            // Clean up
+            document.body.removeChild(a);
+            URL.revokeObjectURL(input_url);
+            URL.revokeObjectURL(output_url);
+        }
+    };
 
   return (
-    <HydrateClient>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
-          <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
-            Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
-          </h1>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-              href="https://create.t3.gg/en/usage/first-steps"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">First Steps →</h3>
-              <div className="text-lg">
-                Just the basics - Everything you need to know to set up your
-                database and authentication.
-              </div>
-            </Link>
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-              href="https://create.t3.gg/en/introduction"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">Documentation →</h3>
-              <div className="text-lg">
-                Learn more about Create T3 App, the libraries it uses, and how
-                to deploy it.
-              </div>
-            </Link>
-          </div>
-          <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white">
-              {hello ? hello.greeting : "Loading tRPC query..."}
-            </p>
-          </div>
+    <>
+      <main className="flex text-xl flex-col items-center animate-fade">
+        <div className="mt-8 w-full">
+            <p className="flex items-center justify-center">Upload MP4 File</p>
 
-          <LatestPost />
+              <div className="flex items-center justify-center w-3/4 mx-auto">
+                  <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                          <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                          </svg>
+                          <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">Ony accepts mp4</p>
+                      </div>
+                      <input id="dropzone-file" type="file" accept="video/mp4"onChange={handleFileUpload}className="hidden" />
+                  </label>
+              </div> 
+
+            {selectedFile && (
+                <button
+                    onClick={handleDownload}
+                    className="mb-2 mt-4 px-4 py-2 bg-primary hover:bg-primary/70 text-black rounded-lg cursor-pointer transition-colors duration-300"
+                >
+                    Download {selectedFile.name}
+                </button>
+            )}
         </div>
       </main>
-    </HydrateClient>
+    </>
   );
 }

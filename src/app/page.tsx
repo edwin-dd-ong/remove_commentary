@@ -27,7 +27,7 @@ export default function Home() {
             // Create a temporary anchor element
             const a = document.createElement('a');
             a.href = output_url;
-            a.download = selectedFile.name.replace('.mp4', '.mp3');
+            a.download = selectedFile.name.replace('.mp4', '.mp4');
             document.body.appendChild(a);
             a.click();
             // Clean up
@@ -41,7 +41,7 @@ export default function Home() {
     <>
       <main className="flex text-xl flex-col items-center animate-fade">
         <div className="mt-8 w-full">
-            <p className="flex items-center justify-center">Upload MP4 File</p>
+            <p className="flex items-center justify-center">Upload an tournament mp4 file to remove commentary</p>
 
               <div className="flex items-center justify-center w-3/4 mx-auto">
                   <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">

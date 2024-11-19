@@ -1,6 +1,4 @@
 "use client";
-import Link from "next/link";
-import { api, HydrateClient } from "~/trpc/server";
 import { useState } from "react";
 import Mp4ToMp3 from "./_components/mp4_to_mp3";
 
@@ -14,7 +12,7 @@ export default function Home() {
             setSelectedFile(file);
             console.log('Selected file:', file.name);
         } else {
-            window.alert("Please select an MP4 file");
+            alert("Please select an MP4 file");
         }
     };
 

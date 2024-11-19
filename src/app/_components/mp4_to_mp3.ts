@@ -62,7 +62,7 @@ export default async function Mp4ToMp3(input_url: string) {
             '-i', 'final_output.mp3',    // Processed audio input
             '-c:v', 'copy',              // Copy video stream without re-encoding
             '-map', '0:v:0',             // Map video from first input
-            '-map', '1:a:0',             // Map audio from second input
+            '-map', '1:a:0',             // Maps audio from second input
             'output_video.mp4'           // Final output file
         ]);
 

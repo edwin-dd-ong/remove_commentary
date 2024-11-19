@@ -4,7 +4,7 @@ export default async function processAudio(mp3File: File): Promise<Blob> {
     formData.append('file', mp3File); // Use the File object directly
 
     try {
-        const response = await fetch('http://127.0.0.1:8000/process', {
+        const response = await fetch('https://test-964820033541.us-central1.run.app', {
             method: 'POST',
             body: formData,
         });
@@ -17,5 +17,6 @@ export default async function processAudio(mp3File: File): Promise<Blob> {
         console.error('Error processing audio:', error);
         throw error;
     }
+    
 }
 

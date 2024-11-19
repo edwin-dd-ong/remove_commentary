@@ -24,6 +24,7 @@ export default function Home() {
             const input_url = URL.createObjectURL(selectedFile);
             console.log(input_url)
             const output_url = await Mp4ToMp3(input_url);
+            // create array, pass in by reference, update in Mp4ToMp3
             // Create a temporary anchor element
             const a = document.createElement('a');
             a.href = output_url;
@@ -36,6 +37,7 @@ export default function Home() {
             URL.revokeObjectURL(output_url);
         }
     };
+    
 
   return (
     <>
@@ -66,6 +68,7 @@ export default function Home() {
             )}
         </div>
       </main>
+      
     </>
   );
 }

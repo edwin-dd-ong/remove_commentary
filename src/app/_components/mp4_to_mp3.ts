@@ -1,3 +1,5 @@
+'use client';
+
 import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { fetchFile, toBlobURL } from '@ffmpeg/util';
 import processAudio from './call_demucs';
@@ -26,7 +28,7 @@ const load = async () => {
     }
 }
 
-export default async function Mp4ToMp3(input_url: string) {
+const processVideo = async (input_url: string) => {
     try {
         console.log("mp4tomp3 called");
         await load();
@@ -77,6 +79,12 @@ export default async function Mp4ToMp3(input_url: string) {
         throw error;
     }
 }
+
+const Mp4ToMp3 = (input_url: string) => {
+    return processVideo(input_url);
+}
+
+export default Mp4ToMp3;
 
 
 

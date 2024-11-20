@@ -1,7 +1,6 @@
 /* eslint-disable */
 "use client";
 import { useState } from "react";
-import Mp4ToMp3 from "./_components/mp4_to_mp3";
 
 
 export default function Home() {
@@ -19,7 +18,9 @@ export default function Home() {
 
     const handleDownload = async () => {
         if (selectedFile) {
-            // Create a URL for the file
+            // Add dynamic import for Mp4ToMp3
+            const { default: Mp4ToMp3 } = await import('./_components/mp4_to_mp3');
+            
             const input_url = URL.createObjectURL(selectedFile);
             console.log(input_url)
             const output_url = await Mp4ToMp3(input_url);

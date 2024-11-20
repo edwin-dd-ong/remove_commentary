@@ -5,6 +5,7 @@ import { useState } from "react";
 
 export default function Home() {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [progressLogs, setProgressLogs] = useState<string[]>([]);
   
     const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0] as File;
@@ -19,16 +20,17 @@ export default function Home() {
     const handleDownload = async () => {
         if (selectedFile) {
             // Add dynamic import for Mp4ToMp3
-            const { default: Mp4ToMp3 } = await import('./_components/mp4_to_mp3');
-            
+            const { default: Mp4ToMp3 } = await import('./_components/mp4_to_mp3');  
             const input_url = URL.createObjectURL(selectedFile);
             console.log(input_url)
-            const output_url = await Mp4ToMp3(input_url);
+            setProgressLogs([ "loaded file"])
+            const output_url = await Mp4ToMp3(input_url, progressLogs, setProgressLogs);
+            setProgressLogs([ "File returned!"])
             // create array, pass in by reference, update in Mp4ToMp3
             // Create a temporary anchor element
             const a = document.createElement('a');
             a.href = output_url;
-            a.download = selectedFile.name.replace('.mp4', '.mp4');
+            a.download = selectedFile.name;
             document.body.appendChild(a);
             a.click();
             // Clean up
@@ -66,7 +68,9 @@ export default function Home() {
                     Download {selectedFile.name}
                 </button>
             )}
+            {progressLogs}
         </div>
+        
       </main>
       
     </>

@@ -28,7 +28,7 @@ const load = async () => {
     }
 }
 
-const processVideo = async (input_url: string) => {
+const processVideo = async (input_url: string, progressLogs: string[], setProgressLogs: React.Dispatch<React.SetStateAction<string[]>>) => {
     try {
         console.log("mp4tomp3 called");
         await load();
@@ -38,9 +38,10 @@ const processVideo = async (input_url: string) => {
         const data = await ffmpeg.readFile('output.mp3');
         const mp3File = new File([data], 'output.mp3', { type: 'audio/mp3' });
         console.log("converted file into mp3");
+        setProgressLogs([" split out audio from mp4"]);
         
         // Get vocals from demucs
-        const vocals_only = await processAudio(mp3File);
+        const vocals_only = await processAudio(mp3File, progressLogs, setProgressLogs);
         
         // Write vocals to FFmpeg and invert them
         await ffmpeg.writeFile('vocals.wav', new Uint8Array(await vocals_only.arrayBuffer()));
@@ -49,6 +50,7 @@ const processVideo = async (input_url: string) => {
             '-af', 'volume=-1',      // Apply volume inversion (multiply by -1)
             'inverted_vocals.wav'    // Output file
         ]);
+        setProgressLogs([ " vocals track waveform inverted"]);
         // Mix the original audio with inverted vocals
 
         await ffmpeg.exec([
@@ -57,6 +59,7 @@ const processVideo = async (input_url: string) => {
             '-filter_complex', '[0:a][1:a]amix=inputs=2:weights=1 1:normalize=0',
             'final_output.mp3'
         ]);
+        setProgressLogs([ " inverted vocals track muxed with audio"]);
         
         // Combine the processed audio with the original video
         await ffmpeg.exec([
@@ -67,6 +70,7 @@ const processVideo = async (input_url: string) => {
             '-map', '1:a:0',             // Maps audio from second input
             'output_video.mp4'           // Final output file
         ]);
+        setProgressLogs([ " gamesounds combined with video"]);
 
         // Read the final video file
         const finalVideoData = await ffmpeg.readFile('output_video.mp4');
@@ -80,8 +84,8 @@ const processVideo = async (input_url: string) => {
     }
 }
 
-const Mp4ToMp3 = (input_url: string) => {
-    return processVideo(input_url);
+const Mp4ToMp3 = (input_url: string, progressLogs: string[], setProgressLogs: React.Dispatch<React.SetStateAction<string[]>>) => {
+    return processVideo(input_url, progressLogs, setProgressLogs);
 }
 
 export default Mp4ToMp3;

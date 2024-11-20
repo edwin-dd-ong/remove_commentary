@@ -8,6 +8,7 @@ export default async function processAudio(mp3File: File, progressLogs: string[]
         const response = await fetch('https://test-964820033541.us-central1.run.app', {
             method: 'POST',
             body: formData,
+            keepalive: true 
         });
         console.log("response fetched")
         setProgressLogs([ " vocals_only received"]);

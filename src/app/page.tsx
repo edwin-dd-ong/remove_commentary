@@ -65,10 +65,10 @@ export default function Home() {
                     onClick={handleDownload}
                     className="mb-2 mt-4 px-4 py-2 bg-primary hover:bg-primary/70 text-black rounded-lg cursor-pointer transition-colors duration-300"
                 >
-                    Download {selectedFile.name}
+                    Click here to start processing {selectedFile.name}
                 </button>
             )}
-            {progressLogs}
+            <div className="mt-2">{progressLogs}</div>
         </div>
         
       </main>

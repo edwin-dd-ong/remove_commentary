@@ -44,7 +44,7 @@ export default async function processAudio(mp3File: File, progressLogs: string[]
     formData.append('file', mp3File); // Use the File object directly
 
     try {
-        setProgressLogs([ " sending audio to the cloud, this may take a loooooong time..."]);
+        setProgressLogs([ " server is processing, this may take a loooooong time..."]);
         try {
             // Attempt to keep the device awake
             await keepAwake();

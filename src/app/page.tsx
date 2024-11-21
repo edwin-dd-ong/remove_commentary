@@ -47,7 +47,7 @@ export default function Home() {
         <div className="mt-8 w-full">
             <p className="flex items-center justify-center">Upload an tournament mp4 file to remove commentary</p>
 
-              <div className="flex items-center justify-center w-3/4 mx-auto">
+              <div className="flex flex-col items-center justify-center w-3/4 mx-auto">
                   <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
                           <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
@@ -58,17 +58,16 @@ export default function Home() {
                       </div>
                       <input id="dropzone-file" type="file" accept="video/mp4"onChange={handleFileUpload}className="hidden" />
                   </label>
+                    {selectedFile && (
+                        <button
+                            onClick={handleDownload}
+                            className="mb-2 mt-4 px-4 py-2 bg-primary hover:bg-primary/70 text-blue-700 rounded-lg cursor-pointer transition-colors duration-300"
+                        >
+                            Click here to start processing {selectedFile.name}
+                        </button>
+                    )}
+                    <div className="mt-2">{progressLogs}</div>
               </div> 
-
-            {selectedFile && (
-                <button
-                    onClick={handleDownload}
-                    className="mb-2 mt-4 px-4 py-2 bg-primary hover:bg-primary/70 text-black rounded-lg cursor-pointer transition-colors duration-300"
-                >
-                    Click here to start processing {selectedFile.name}
-                </button>
-            )}
-            <div className="mt-2">{progressLogs}</div>
         </div>
         
       </main>

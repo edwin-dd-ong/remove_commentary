@@ -45,14 +45,26 @@ export default async function processAudio(mp3File: File, progressLogs: string[]
 
     try {
         setProgressLogs([ " sending audio to the cloud..."]);
-        await keepAwake();
+        try {
+            // Attempt to keep the device awake
+            await keepAwake();
+        } catch (error) {
+            console.error('Error keeping awake:', error);
+            // Continue execution even if keepAwake fails
+        }
         const response = await fetch('https://test-964820033541.us-central1.run.app', {
             method: 'POST',
             body: formData,
         });
         console.log("response fetched")
         setProgressLogs([ " vocals_only received"]);
-        await releaseWakeLock();
+        try {
+            // Attempt to keep the device awake
+            await releaseWakeLock();
+        } catch (error) {
+            console.error('Error releasing wakelock:', error);
+            // Continue execution even if keepAwake fails
+        }
         if (!response.ok) {
             throw new Error(`Failed to process the file, status: ${response.status}`);
         }

@@ -19,7 +19,7 @@ export default function RootLayout({
       <body className="flex flex-col min-h-screen bg-yellow-100">
         <TRPCReactProvider>{children}</TRPCReactProvider>
 
-        <footer className="border-4 border-double border-black bg-zinc-50/50 rounded-lg mx-4 my-4 mt-auto">
+        {/* <footer className="border-4 border-double border-black bg-zinc-50/50 rounded-lg mx-4 my-4 mt-auto">
             <div className="w-full max-w-screen-xl mx-auto p-4 md-8">
                 <div className="sm:flex sm:items-center sm:justify-between">
                     <a href="https://flowbite.com/" className="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
@@ -41,7 +41,7 @@ export default function RootLayout({
                     </ul>
                 </div>
             </div>
-        </footer>
+        </footer> */}
 
 
       </body>

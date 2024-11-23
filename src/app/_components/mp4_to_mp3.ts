@@ -28,7 +28,9 @@ const load = async () => {
     }
 }
 
-const processVideo = async (input_url: string, progressLogs: string[], setProgressLogs: React.Dispatch<React.SetStateAction<string[]>>) => {
+const processVideo = async (input_url: string, progressLogs: string[], setProgressLogs: React.Dispatch<React.SetStateAction<string[]>>, options: { signal: AbortSignal }) => {
+    const { signal } = options;
+
     try {
         console.log("mp4tomp3 called");
         await load();
@@ -77,15 +79,19 @@ const processVideo = async (input_url: string, progressLogs: string[], setProgre
         const mp4Blob = new Blob([finalVideoData], { type: 'video/mp4' });
         const out_url = URL.createObjectURL(mp4Blob);
         console.log("out url " + out_url);
+        if (signal.aborted) {
+            throw new Error("Download was aborted");
+        }
         return out_url;
     } catch (error) {
-        console.error("Error converting mp4 to mp3:", error);
+        console.error("Error during processing:", error);
+        
         throw error;
     }
 }
 
-const Mp4ToMp3 = (input_url: string, progressLogs: string[], setProgressLogs: React.Dispatch<React.SetStateAction<string[]>>) => {
-    return processVideo(input_url, progressLogs, setProgressLogs);
+const Mp4ToMp3 = (input_url: string, progressLogs: string[], setProgressLogs: React.Dispatch<React.SetStateAction<string[]>>, options: { signal: AbortSignal }) => {
+    return processVideo(input_url, progressLogs, setProgressLogs, options);
 }
 
 export default Mp4ToMp3;

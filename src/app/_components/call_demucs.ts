@@ -52,7 +52,7 @@ export default async function processAudio(mp3File: File, progressLogs: string[]
             console.error('Error keeping awake:', error);
             // Continue execution even if keepAwake fails
         }
-        const response = await fetch('https://test-964820033541.us-central1.run.app', {
+        const response = await fetch('https://demucs-964820033541.us-central1.run.app', {
             method: 'POST',
             body: formData,
         });
